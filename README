@@ -1,0 +1,90 @@
+Nume: Comsa Iuliana Violeta
+Grupa: 311-CA 
+
+Tema 2: The library of hashbabel
+
+    In cadul acestei teme am implementat un sistem de imprumut al cartilor,
+o biblioteca cu ajutorul unui hashtable. Am utilizat 4 structuri, unul pentru
+hashtable, unul pentru liste utilizate in cadul implementarii operatiilor de baza
+din hashtable, unul ce retine perechi de tip key-value si altul ce retine datele
+fiecarei carti din biblioteca (rating, nr de imprumuturi, numele cartii) utilizat
+doar in cadul operatiei de sortare al cartilor.
+
+    Programul trebuie sa satisfaca anumite comenzi introduse de la tastatura pentru
+a oferi functionalitatea unei biblioteci.
+    Comenzile implementate sunt:
+        Comanda "ADD_BOOK" -> preia de la tastatura numele cartii si numarul
+    de definitii, apoi citeste nr_def definitii pe care le intorduce intr-un
+    hashtable auxiliar, care la randul sau va fi introdus in hashtable-ul
+    bibliotecii. Totodata, aceasta comanda verifica daca respectiva carte
+    a mai fost introdusa in biblioteca si in caz afirmativ ii actualizeaza
+    valorea si reseteaza raitingul, nr de imprumuturi si o sterge din
+    hashtable-urile borrowed si reachability in caz ca aceasta a fost 
+    imprumutata.
+        Daca load_factor depaseste 1, atunci inseamna ca s-au adaugat mai multe
+    carti decat capacitatea bibliotecii si se va face resize. Resize creeaza
+    un nou hashtable unde copiaza vechile carti, avand un hmax dublu.
+
+        Comanda "GET_BOOK" -> cauta cartea introdusa de la tastatura in
+    biblioteca si daca este gasita, i se vor afisa ratingul si numarul
+    de imprumuturi. Daca aceasta nu este gasita, se vor afisa mesaje de eroare.
+
+        Comanda "RMV_BOOK" -> cauta cartea primita ca parametru in biblioteca si
+    daca este gasita, va fi stersa din biblioteca, dar si din sistemul de
+    imprumuturi (borrowed) si disponibilitate (richability), urmand ca size-ul
+    sa fie decrementat.
+
+        Comanda "ADD_DEF" -> primeste ca parametru numele cartii, cheia si valoarea
+    noii definitii si daca exista cartea, noua definitie va fi adaugata 
+    in hashtable-ul de definitii al cartii. Daca definitia exista deja in carte,
+    atunci valoarea acesteia se va actualiza.
+
+        Comanda "GET_DEF" -> primeste ca parametru cartea si cheia, apoi daca exista
+    cartea se va cauta definitia. Daca definitia se gaseste in carte, se va afisa
+    valoarea cheii cautate. Daca nu exista cartea sau definitia, vor fi afisate
+    mesaje de eroare.
+
+        Comanda "RMV_DEF" -> primeste ca parametru cartea si cheia definitiei, apoi
+    daca exista cartea se va cauta definitia. Daca definitia exista, atunci din
+    hashtable-ul de definitii va fi stearsa intreaga definitie, decementrand size-ul
+    hashtable-ului.
+
+        Comanda "ADD_USER" -> se va creea o baza de date (un hashtable) pentru
+    useri unde se va retine numele fiecarui user si numarul de puncte, valoarea
+    initiala fiind initializata cu 100. De asemenea, daca load_factorul depaseste
+    valoarea 1, se va face resize.
+
+        Comanda "BORROW" -> primeste ca parametru username, bookname si numarul de
+    zile pentru care este imprumutata cartea. In cadrul acetei comenzi se verifica
+    daca utilizatorul a mai imprumutat o carte (prin verificarea existentei
+    usernameului in hashtable-ul borrowed), iar daca acesta nu a mai imprumutat,
+    poate imprumuta cartea, numele utilizatorului si numele cartii fiind adaugat
+    in hashtable-ul borrowed si numele cartii si numarul de zile pentru care este
+    imprumutata cartea se va retine in hashtable-ul reachability.
+
+        Comanda "RETURN" -> primeste ca parametru username-ul, bookname-ul,
+    numarul de zile de cand a imprumutat cartea si ratingul acordat cartii.
+    Daca a returnat cartea in mai putine zile decat a imprumutat-o, punctajul sau
+    se va mari cu (nr_zile_imprumut - nr_zile_returnat), dar daca o returneaza mai
+    tarziu decat numarul de zile pentru care a imprumutat cartea, din punctajul
+    precedent i se vor scadea 2 * (nr_zile_returnat - nr_zile_imprumut).
+    Totodata va fi actualizat ratingul, facandu-se media cu toate raitingurile
+    acordate cartii, dar si nr de imprumuturi va fi incrementat cu 1. Odata
+    ce cartea a fost returnata, va fi stearsa din borrowed si reachability.
+
+        Comanda "LOST" -> primeste ca parametru username-ul si bookname-ul si
+    sterge din biblioteca cartea pe care user-ul a pierdut-o. Odata cu stergerea
+    din biblioteca, cartea va fi stearsa si din hashtable-urile rating, purchases
+    , borrowed si reachability. User-ului care a pierdut cartea i se va scadea din
+    punctaj 50 de punte. Daca punctajul sau ajunge sa fie negativ, userul va fi
+    banat si nu va mai putea imprumuta carti.
+
+        Comanda "EXIT" -> la sfarsitul comenzilor se va realiza un top al cartilor
+    cu cel mai mare raiting. In cazul in care acestea au raiting egal, se va face
+    sortarea dupa nr de imprumuturi. Daca nr de imrpumuri este egal, sortarea se
+    va face dupa numele cartii. Penrtu eficienta am optat pentru qsort, apoi
+    am printat fiecare carte cu raitingul si nr de imprumuturi asociat. Totodata,
+    se va face un top al userilor in functie de punctele acumulate si se va afisa
+    numele fiecarui utilizator si punctele acumulate.
+        Dupa sortarea si printarea cartilor si userilor, se elibereaza memoria
+    alocata fiecarui hashtable utilizat.
